@@ -1,0 +1,43 @@
+
+CC=gcc
+FLAGS=-m32	\
+	-fno-builtin  \
+	-fno-stack-protector    \
+	-nostdlib               \
+	-nodefaultlibs	\
+
+INC=src/driver/
+OBJ_DIR=obj
+SRC_DIR= src
+TARGET=kernel.elf
+LINKER = ld
+LFLAGS=-T linker.ld -m elf_i386
+OSNAME=bestOs
+SRCS = $(shell find . -name "*.c" | sed 's|^\./||')
+OBJS = $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS))
+BOOTLOADER_OBJ = $(OBJ_DIR)/bootloader.o
+all:$(TARGET) 
+
+$(TARGET) : $(BOOTLOADER_OBJ) $(OBJS)
+	$(LINKER) $(LFLAGS) -o $@ $^
+
+$(OBJ_DIR)/%.o : %.c | $(OBJ_DIR)
+	mkdir -p $(dir $@)
+	$(CC) $(FLAGS) -I$(INC) -c -o $@ $<
+
+$(BOOTLOADER_OBJ): bootloader.asm | $(OBJ_DIR)
+	nasm -f elf32 bootloader.asm -o $@
+
+$(OBJ_DIR) :
+	mkdir -p $(OBJ_DIR)
+
+clean:
+	rm -rf $(OBJ_DIR)
+
+fclean : clean
+	rm -rf $(TARGET)
+
+bestos: $(TARGET)
+	cp $(TARGET) boot
+	grub-mkrescue -o $(OSNAME).iso boot
+
