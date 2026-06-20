@@ -21,3 +21,4 @@
 #define MAX_CHAR_VGA    4000
 
 void put_char(char c, int x, int y);
+unsigned char set_color(unsigned char bg, unsigned char fg);

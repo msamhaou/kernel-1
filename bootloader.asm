@@ -20,8 +20,8 @@ section .text
 global _start
 
 _start:
-    cli
     mov esp, stack_top
     extern main
+    cli
     call main
     jmp $

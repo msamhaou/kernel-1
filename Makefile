@@ -36,8 +36,10 @@ clean:
 
 fclean : clean
 	rm -rf $(TARGET)
+	rm -rf iso/boot/$(TARGET)
+	rm -rf $(OSNAME).iso
 
 bestos: $(TARGET)
-	cp $(TARGET) boot
-	grub-mkrescue -o $(OSNAME).iso boot
+	cp $(TARGET) iso/boot
+	grub-mkrescue -o $(OSNAME).iso iso
 
