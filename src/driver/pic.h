@@ -1,9 +1,9 @@
-#define PIC1 			0x20
-#define PIC2    		0xA0
-#define PIC1_COMMAND    PIC1
-#define PIC1_DATA       (PIC1 + 1)
-#define PIC2_COMMAND    PIC2
-#define PIC2_DATA       (PIC2 + 1)
+#define MASTER 			0x20
+#define SLAVE    		0xA0
+#define MASTER_COMMAND    MASTER
+#define MASTER_DATA       (MASTER + 1)
+#define SLAVE_COMMAND    SLAVE
+#define SLAVE_DATA       (SLAVE + 1)
 
 #define ICW1_ICW4		0x01		/* Indicates that ICW4 will be present */
 #define ICW1_SINGLE		0x02		/* Single (cascade) mode */
@@ -17,4 +17,11 @@
 #define ICW4_BUF_MASTER	0x0C		/* Buffered mode/master */
 #define ICW4_SFNM		0x10		/* Special fully nested (not) */
 
+#define	IRQ0			0X20
+#define IRQ8			IRQ1 + 0x8
 #define CASCADE_IRQ		2
+
+extern unsigned char inb(unsigned short port);          
+extern void outb(unsigned short port, unsigned char b); 
+extern void io_wait();                                  
+
