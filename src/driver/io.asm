@@ -2,6 +2,7 @@
 section .text
 global outb
 global inb
+global io_wait
 
 
 outb:

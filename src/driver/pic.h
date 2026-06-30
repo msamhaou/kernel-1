@@ -1,3 +1,6 @@
+#ifndef PIC_H
+	#define PIC_H
+
 #define MASTER 			0x20
 #define SLAVE    		0xA0
 #define MASTER_COMMAND    MASTER
@@ -18,10 +21,16 @@
 #define ICW4_SFNM		0x10		/* Special fully nested (not) */
 
 #define	IRQ0			0X20
-#define IRQ8			IRQ1 + 0x8
+#define IRQ8			IRQ0 + 8
 #define CASCADE_IRQ		2
+
+#define PIC_EOI		0x20
 
 extern unsigned char inb(unsigned short port);          
 extern void outb(unsigned short port, unsigned char b); 
 extern void io_wait();                                  
 
+void pic_remap();
+void	PIC_sendEOI(unsigned char irq);
+void	IRQ_clear_mask(unsigned char irq);
+#endif // !PIC_

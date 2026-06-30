@@ -13,16 +13,15 @@
 struct idt_entry {
     unsigned short	base_low;
     unsigned short	selector;
-    unsigned char	flags;
     unsigned char reserved;
+    unsigned char	flags;
     unsigned short	base_high;
 } __attribute__((packed));
 
-
 struct idt_ptr
 {
-    unsigned int	base;
     unsigned short	limit;   
+    unsigned int	base;
 }__attribute__((packed));
 
 static struct idt_entry _idt[256];
@@ -30,9 +29,11 @@ static struct idt_entry _idt[256];
 static struct idt_ptr idt_p =
 {
 	.limit = (sizeof(struct idt_entry) * IDT_MAX_INTS) - 1,
-	.base = (unsigned int)_idt
+	.base = (unsigned int)(&_idt[0])
 };
 
 void idt_init();
+void interrupt_handler(unsigned int num);
+static unsigned short	get_current_code_segment(void);
 #endif
 

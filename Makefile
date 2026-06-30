@@ -6,7 +6,7 @@ FLAGS=-m32	\
 	-nostdlib               \
 	-nodefaultlibs	\
 
-INC=src/driver/
+INC=-Isrc/driver/ -Isrc/utils/
 OBJ_DIR=obj
 SRC_DIR= src
 TARGET=kernel.elf
@@ -14,19 +14,25 @@ LINKER = ld
 LFLAGS=-T linker.ld -m elf_i386
 OSNAME=bestOs
 SRCS = $(shell find . -name "*.c" | sed 's|^\./||')
+ASM_SRCS= $(shell find . -name "*.asm" | sed 's|^\./||')
 OBJS = $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS))
+ASM_OBJS = $(patsubst %.asm, $(OBJ_DIR)/%.o, $(ASM_SRCS))
+
+ALL_OBJ = $(ASM_OBJS) $(OBJS)
 BOOTLOADER_OBJ = $(OBJ_DIR)/bootloader.o
 all:$(TARGET) 
 
-$(TARGET) : $(BOOTLOADER_OBJ) $(OBJS)
+$(TARGET) :  $(ALL_OBJ)
 	$(LINKER) $(LFLAGS) -o $@ $^
 
 $(OBJ_DIR)/%.o : %.c | $(OBJ_DIR)
 	mkdir -p $(dir $@)
-	$(CC) $(FLAGS) -I$(INC) -c -o $@ $<
+	$(CC) $(FLAGS) $(INC) -c -o $@ $<
 
-$(BOOTLOADER_OBJ): bootloader.asm | $(OBJ_DIR)
-	nasm -f elf32 bootloader.asm -o $@
+$(OBJ_DIR)/%.o : %.asm | $(OBJ_DIR)
+	mkdir -p $(dir $@)
+	nasm -f elf32 -o $@ $<
+
 
 $(OBJ_DIR) :
 	mkdir -p $(OBJ_DIR)

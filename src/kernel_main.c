@@ -1,4 +1,7 @@
 #include <vga.h>
+#include <utils.h>
+#include <pic.h>
+#include <idt.h>
 
 static void clear_screen(void) {
     volatile unsigned short *vga = (unsigned short *)VGA_MEMORY;
@@ -12,8 +15,11 @@ static void clear_screen(void) {
 	}
 }
 
+
 int main(void) {
     clear_screen();
-    put_char('4', 40, 12); 
-    put_char('2', 41, 12); 
+	pic_remap();
+	idt_init();
+	put_string("42");
+	return 0;
 }
