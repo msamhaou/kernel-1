@@ -35,8 +35,7 @@ void interrupt_handler(unsigned int irq){
 	{
 		PIC_sendEOI(0);
 	}else if (irq == 33){
-		unsigned char scancode = inb(0x60);
-		put_string("hello\0");
+		keyboard_scan();
 		PIC_sendEOI(1);
 	}
 	return;

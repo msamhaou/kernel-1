@@ -1,6 +1,5 @@
 #include <vga.h>
-
-static int cursor = 0;
+#include <utils.h>
 void put_string(char * str){
 	
 	int i = 0;

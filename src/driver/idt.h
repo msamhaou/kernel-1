@@ -3,6 +3,7 @@
 
 #define IDT_MAX_INTS 256
 
+#include<keyboard.h>
 #define PRESENT		0X1
 #define DPL			0x00
 #define	GATE_SIZE	0x0
